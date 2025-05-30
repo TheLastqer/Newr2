@@ -1,12 +1,18 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
 
+toclipboard([[
+    https://discord.gg/bKPRWatprk
+]])
 local localPlayer = game:GetService("Players").LocalPlayer
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local checkMaterial = require(game:GetService("ReplicatedStorage").Modules.Client.InventoryUtil).HasItem
 local autofarm = false
 local autounlock = false
 local cd = 0
-local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/TheLastqer/Newr2/refs/heads/main/frx'))()
-local window = library:CreateWindow('Credit: FxZ Hub')
+local library = loadstring(game:HttpGet(('https://raw.githubusercontent.com/dementiaenjoyer/UI-LIBRARIES/refs/heads/main/wally-modified/source.lua')))()
+local window = library:CreateWindow('Credit: Neutral')
 window:Section('Stuff')
 window:Toggle("Farm All Resources",{},function(value)
 autofarm = value
@@ -59,4 +65,3 @@ game:GetService("RunService").RenderStepped:Connect(function(delta)
         end
     end
 end)
-
