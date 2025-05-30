@@ -1,0 +1,62 @@
+
+local localPlayer = game:GetService("Players").LocalPlayer
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local checkMaterial = require(game:GetService("ReplicatedStorage").Modules.Client.InventoryUtil).HasItem
+local autofarm = false
+local autounlock = false
+local cd = 0
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/TheLastqer/Newr2/refs/heads/main/frx'))()
+local window = library:CreateWindow('Credit: FxZ Hub')
+window:Section('Stuff')
+window:Toggle("Farm All Resources",{},function(value)
+autofarm = value
+end)
+window:Toggle("Auto Unlock",{},function(value)
+autounlock = value
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function(delta)
+    cd += delta
+    local character = localPlayer.Character
+    local plot = workspace.Plots[localPlayer.Name]
+    if cd > 0.1 then
+        cd = 0
+        if autofarm then
+            for _,v in workspace.Plots[localPlayer.Name].Resources:GetChildren() do
+                if v:GetAttribute("HP") and v:GetAttribute("HP") > 0 then
+                    replicatedStorage.Communication.HitResource:FireServer(v)
+                end
+            end
+        end
+        if autounlock then
+            for _,v in plot.Expand:GetChildren() do
+                for _,material in plot.Expand[v.Name].Top.BillboardGui:GetChildren() do
+                    if replicatedStorage.Storage.Items:FindFirstChild(material.Name) then
+                        replicatedStorage.Communication.ContributeToExpand:FireServer(v.Name,material.Name,1)
+                        if material.Name == "Plank" and plot.Land.S13.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S13.Crafter.Attachment)
+                        elseif material.Name == "Brick" and plot.Land.S24.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S24.Crafter.Attachment)
+                        elseif material.Name == "Bamboo Plank" and plot.Land.S72.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S72.Crafter.Attachment)
+                        elseif material.Name == "Cactus Fiber" and plot.Land.S54.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S54.Crafter.Attachment)
+                        elseif material.Name == "Iron Bar" and plot.Land.S23.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.DoubleCraft:FireServer(plot.Land.S23.Crafter.Attachment)
+                        elseif material.Name == "Magmite" and plot.Land.S106.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.DoubleCraft:FireServer(plot.Land.S23.Crafter.Attachment)
+                            replicatedStorage.Communication.DoubleCraft:FireServer(plot.Land.S106.Crafter.Attachment)
+                        elseif material.Name == "Magma Plank" and plot.Land.S108.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S108.Crafter.Attachment)
+                        elseif material.Name == "Obsidian Glass" and plot.Land.S134.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.DoubleCraft:FireServer(plot.Land.S134.Crafter.Attachment)
+                        elseif material.Name == "Mushroom Plank" and plot.Land.S164.Crafter.Attachment.Stock.Value < tonumber(string.split(material.Amount.Text,"/")[2]) then
+                            replicatedStorage.Communication.Craft:FireServer(plot.Land.S164.Crafter.Attachment)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
